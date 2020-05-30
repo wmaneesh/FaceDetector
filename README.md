@@ -6,7 +6,7 @@ A website that detects faces on images.
 
 * The server to host this website was created using Node js and Express js. The website has 4 endpoints: images, profile, register and signin.  
 
-* When the user registers onto the website, the login details: email, name, password, join_date are stored in a database. The database management system that was used for this project was PostgreSQL.  
+* When the user registers onto the website, the login details: email, name, password, join_date are stored in a database. The database management system that was used for this project was PostgresSQL.  
 
 * The server, database and the website are all deployed on Heroku.
 
@@ -28,4 +28,16 @@ The api that is being used is Clarifai's computer vision API that can detect fac
 <img src="https://github.com/wmaneesh/FaceDetector/blob/master/images/face-detect-page.png" width="600">
 
 - - - -
+
+### What I Learned ###
+
+* REACT.js
+* NODE.js
+* EXPRESS js
+* NPM
+* JSON parsing
+* RESTful API Design
+* PostgresSQL
+* Authentications
+* Production and Deployement
 
