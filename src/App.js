@@ -6,11 +6,6 @@ import FaceRecognition from "./Components/FaceRecognition/FaceRecognition";
 import Sign from "./Components/Sign/Sign";
 import Register from "./Components/Register/Register";
 import Particles from "react-particles-js";
-import Clarifai from "clarifai";
-
-const app = new Clarifai.App({
-  apiKey: "898db3f7af2b434ab39179a493c96170",
-});
 
 const ParticlesOptions = {
   particles: {
@@ -24,17 +19,45 @@ const ParticlesOptions = {
   },
 };
 
+const initialState = {
+  input: "",
+  imageUrl: "",
+  box: {},
+  route: "sign",
+  isSignedIn: false,
+  user: {
+    id: "",
+    name: "",
+    email: "",
+    entries: 0,
+    joined: "",
+  },
+};
+
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: "",
-      imageUrl: "",
-      box: {},
-      route: "sign",
-      isSignedIn: false,
-    };
+    this.state = initialState;
   }
+
+  //-----To check if the server is working we can do this. Need to install cors to be able to get through google
+  // componentDidMount() {
+  //   fetch('http://localhost:3000')
+  //   .then(response => response.json())
+  //   .then(console.log)
+  // }
+
+  loadUser = (data) => {
+    this.setState({
+      user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined,
+      },
+    });
+  };
 
   calculateFaceLocation = (data) => {
     const clarifaiFace =
@@ -61,21 +84,32 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    app.models
-      .predict(
-        Clarifai.FACE_DETECT_MODEL,
-        // URL
-        this.state.input
-      )
-      .then((response) =>
-        this.displayFaceBox(this.calculateFaceLocation(response))
-      )
+    fetch("https://pure-lowlands-23251.herokuapp.com/imageurl", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        input: this.state.input,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response) {
+          fetch("https://pure-lowlands-23251.herokuapp.com:3000/image", {
+            method: "put",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: this.state.user.id,
+            }),
+          }).then((response) => response.json());
+        }
+        this.displayFaceBox(this.calculateFaceLocation(response));
+      })
       .catch((err) => console.log(err));
   };
 
   onRouteChange = (route) => {
     if (route === "signout") {
-      this.setState({ isSignedIn: false });
+      this.setState(initialState);
     } else if (route === "home") {
       this.setState({ isSignedIn: true });
     }
@@ -83,8 +117,7 @@ class App extends Component {
   };
 
   render() {
-
-    const {isSignedIn, imageUrl, route, box} = this.state;
+    const { isSignedIn, imageUrl, route, box } = this.state;
     return (
       <div className="App">
         <Particles className="particles" params={ParticlesOptions} />
@@ -99,15 +132,15 @@ class App extends Component {
               onButtonSubmit={this.onButtonSubmit}
               onWebCamSubmit={this.onWebCamSubmit}
             />
-            <FaceRecognition
-              box={box}
-              imageUrl={imageUrl}
-            />
+            <FaceRecognition box={box} imageUrl={imageUrl} />
           </div>
         ) : route === "sign" ? (
-          <Sign onRouteChange={this.onRouteChange} />
+          <Sign loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
         ) : (
-          <Register onRouteChange={this.onRouteChange} />
+          <Register
+            loadUser={this.loadUser}
+            onRouteChange={this.onRouteChange}
+          />
         )}
       </div>
     );
