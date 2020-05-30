@@ -1,6 +1,6 @@
 # FaceDetector
 
-Website built using REACT framework and Clarifai API to detect faces on images. 
+A website that detects faces on images.
 
 - - - -
 
