@@ -36,6 +36,7 @@ The api that is being used is Clarifai's computer vision API that can detect fac
 * EXPRESS js
 * NPM
 * JSON parsing
+* KNAX 
 * RESTful API Design
 * PostgresSQL
 * Authentications
