@@ -1,6 +1,16 @@
 # FaceDetector
 - - - -
-Website built using REACT framework and Clarifai API to detect faces on images.  
+Website built using REACT framework and Clarifai API to detect faces on images. 
+
+- - - -
+
+* The server to host this website was created using Node js and Express js. The website has 4 endpoints: images, profile, register and signin.  
+
+* When the user registers onto the website, the login details: email, name, password, join_date are stored in a database. The database management system that was used for this project was PostgreSQL.  
+
+* The server, database and the website are all deployed on Heroku.
+
+- - - -
 
 ## Layout of Project ##
 
@@ -20,8 +30,3 @@ The api that is being used is Clarifai's computer vision API that can detect fac
 
 - - - -
 
-* The server to host this website was created using Node js and Express js. The website has 4 endpoints: images, profile, register and signin.  
-
-* When the user registers onto the website, the login details: email, name, password, join_date are stored in a database. The database management system that was used for this project was PostgreSQL.  
-
-* The server, database and the website are all deployed on Heroku.
